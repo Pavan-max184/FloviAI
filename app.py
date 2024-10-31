@@ -1,32 +1,20 @@
-import openai
+# app.py
 import streamlit as st
+from transformers import pipeline
 
-# Set up OpenAI API key (stored in Streamlit secrets)
-openai.api_key = st.secrets["openai_api_key"]
+# Load the Hugging Face text generation pipeline using GPT-2
+generator = pipeline("text-generation", model="gpt2")
 
-# Streamlit UI setup
-st.title("AI-Powered Content Generator with OpenAI")
-st.write("Enter a prompt below, and AI will generate content for you!")
+# Streamlit app interface
+st.title("GPT-2 Content Generator")
+prompt = st.text_input("Enter a prompt to generate content:")
 
-# User prompt input
-user_prompt = st.text_input("Enter your prompt:")
-
-# Generate content on button click
-if st.button("Generate Content"):
-    if user_prompt.strip() == "":
-        st.warning("Please enter a valid prompt.")
-    else:
+if st.button("Generate"):
+    if prompt:
         with st.spinner("Generating content..."):
-            try:
-                # Generate content using the ChatGPT model gpt-3.5-turbo
-                response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "user", "content": user_prompt}
-                    ],
-                    max_tokens=150
-                )
-                st.write("**Generated Content:**")
-                st.write(response['choices'][0]['message']['content'].strip())
-            except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
+            # Generate content
+            result = generator(prompt, max_length=50, num_return_sequences=1)
+            st.write("**Generated Content:**")
+            st.write(result[0]["generated_text"])
+    else:
+        st.warning("Please enter a prompt to generate content.")
