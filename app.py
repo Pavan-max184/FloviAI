@@ -2,8 +2,8 @@
 import streamlit as st
 from transformers import pipeline
 
-# Load the Hugging Face text generation pipeline using GPT-2
-generator = pipeline("text-generation", model="gpt2")
+# Use the 'torch' framework for the generator
+generator = pipeline("text-generation", model="gpt2", framework="pt")
 
 # Streamlit app interface
 st.title("GPT-2 Content Generator")
