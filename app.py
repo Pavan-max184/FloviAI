@@ -18,13 +18,15 @@ if st.button("Generate Content"):
     else:
         with st.spinner("Generating content..."):
             try:
-                # Generate content using OpenAI API
-                response = openai.Completion.create(
-                    model="text-davinci-003",
-                    prompt=user_prompt,
+                # Generate content using the ChatGPT model gpt-3.5-turbo
+                response = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {"role": "user", "content": user_prompt}
+                    ],
                     max_tokens=150
                 )
                 st.write("**Generated Content:**")
-                st.write(response['choices'][0]['text'].strip())
+                st.write(response['choices'][0]['message']['content'].strip())
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
