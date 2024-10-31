@@ -10,7 +10,8 @@ prompt = st.text_input("Enter a prompt to generate content:")
 @st.cache_resource(show_spinner=False)
 def load_model():
     try:
-        generator = pipeline("text-generation", model="gpt2", device=0)  # Use device=0 for GPU or remove for CPU
+        # Load a smaller model to avoid resource issues
+        generator = pipeline("text-generation", model="distilgpt2")  # Use a smaller model for better performance
         return generator
     except Exception as e:
         st.error(f"Error loading model: {e}")
