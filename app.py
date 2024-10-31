@@ -2,7 +2,7 @@ import openai
 import streamlit as st
 
 # Set up OpenAI API key (stored in Streamlit secrets)
-openai.api_key = st.secrets["openai_api_key"]  # Store your OpenAI API key as "openai_api_key" in Streamlit Secrets
+openai.api_key = st.secrets["openai_api_key"]
 
 # Streamlit UI setup
 st.title("AI-Powered Content Generator with OpenAI")
@@ -19,11 +19,12 @@ if st.button("Generate Content"):
         with st.spinner("Generating content..."):
             try:
                 # Generate content using OpenAI API
-                response = openai.ChatCompletion.create(
-                    model="gpt-3.5-turbo",
-                    messages=[{"role": "user", "content": user_prompt}]
+                response = openai.Completion.create(
+                    model="text-davinci-003",
+                    prompt=user_prompt,
+                    max_tokens=150
                 )
                 st.write("**Generated Content:**")
-                st.write(response['choices'][0]['message']['content'])
+                st.write(response['choices'][0]['text'].strip())
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
